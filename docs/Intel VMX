@@ -15,7 +15,7 @@
     VMX non-root operation在执行cpu指令时被限制和修改以适应虚拟化，一些操作会触发VM exits进入VMM，此时VMM重新获得cpu的控制权。
 
 2.3 VMM的生命周期
-    image.png
+    ![image](images/VMX life cycle.bmp)
     1.执行VMXON指令使能VMX操作，即可以执行虚拟化相关指令.
     2.使用VMLAUNCH、VMRESUME等指令执行VM entries操作，即将cpu切换给VM使用；
     3.VM Exit将退出VM切换至VMM，退出点由VMM设定，VMM定义了各类VM EXIT事件并对各类退出事件进行对应的处理.
