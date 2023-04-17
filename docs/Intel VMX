@@ -1,0 +1,26 @@
+1.说明
+    学习资料来源：64-ia-32-architectures-software-developer-vol-3c-part-3-manual.pdf
+    VMX：VIRTUAL MACHINE ARCHITECTURE
+
+2.学习记录
+2.1 虚拟化架构
+    VMX定义了处理器级的虚拟化支持，其中：
+    Virtual-machine monitors (VMM)具有整个主机资源的控制权限，可以调用特权虚拟化指令（VMON、VMOFF、VMLAUCH、VMRESUME、VMCLEAR、VMWRITE等）
+    管理虚拟机；Guest software（VM）：包含操作系统的软件，每个虚拟机独立运行，无权执行部分宿主机的特权指令（比如VMCALL）；
+
+2.2 VMX操作
+    VMX分为两种操作，root operation 和 non-root operation，而VMM和VM就是分别运行在root operation和non-root operation.VMM和VM运行都是运行在
+    同样的物理cpu上，在运行时就涉及到不同状态的切换，比如由root operation进入non-root operation时叫做VM entries，由non-root operation切换
+    到root operation时叫做VM exits。
+    VMX non-root operation在执行cpu指令时被限制和修改以适应虚拟化，一些操作会触发VM exits进入VMM，此时VMM重新获得cpu的控制权。
+
+2.3 VMM的生命周期
+    image.png
+    1.执行VMXON指令使能VMX操作，即可以执行虚拟化相关指令.
+    2.使用VMLAUNCH、VMRESUME等指令执行VM entries操作，即将cpu切换给VM使用；
+    3.VM Exit将退出VM切换至VMM，退出点由VMM设定，VMM定义了各类VM EXIT事件并对各类退出事件进行对应的处理.
+    4.VMXOFF关闭VMX的操作.
+    
+2.4 VIRTUAL-MACHINE CONTROL STRUCTURE（VMCS）
+    VMCS控制VMM以及VM的切换，每个逻辑cpu都会关联一个VMCS，VMCS有一个64位的地址指针，通过VMTRST和VMPTRLD可以读取和写入该指针，通过VMREAD、
+    VMWRITE、VMCLEAR指令来配置VMCS。
