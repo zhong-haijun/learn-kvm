@@ -10,17 +10,18 @@ typedef struct vm_t{
 
 typedef struct QemuClass QemuClass;
 typedef int (*KVMOpFunc)(QemuClass *obj, ...);
+typedef int (*QemuOpFunc)(QemuClass *obj, ...);
 
 struct QemuClass{
     int kvm_fd;
     vm_t vm;
     KVMOpFunc kvm_check;
     KVMOpFunc create_vm;
-    int (*init_vm_mem)(QemuClass *obj, ...);
+    QemuOpFunc init_vm_mem;
     KVMOpFunc create_mem;
     KVMOpFunc create_vcpu;
     KVMOpFunc set_sregs;
-    int (*run_vm)(QemuClass *obj, ...);
+    QemuOpFunc run_vm;
 };
 
 #endif

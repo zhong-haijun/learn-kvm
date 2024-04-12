@@ -20,7 +20,7 @@ int kvm_check(QemuClass *obj, ...)
     int ret;
     // Get KVM_GET_API_VERSION
     ret = ioctl(obj->kvm_fd, KVM_GET_API_VERSION, NULL);
-    if (ret != -1) {
+    if (ret > 0) {
         printf("KVM api Version:%d\n", ret);
     } else {
         return false;
@@ -28,18 +28,17 @@ int kvm_check(QemuClass *obj, ...)
 
     // Check KVM_CAP_MAX_VCPUS
     ret = ioctl(obj->kvm_fd, KVM_CHECK_EXTENSION, KVM_CAP_MAX_VCPUS);
-    if (ret != -1) {
+    if (ret > 0) {
         printf("KVM supports max vcpus per quest(vm):%d\n", ret);
     } else {
         return false;
     }
 
     ret = ioctl(obj->kvm_fd, KVM_CHECK_EXTENSION, KVM_CAP_IOMMU);
-    if (ret != -1) {
+    if (ret > 0) {
         printf("KVM supports IOMMU:%d\n", ret);
     } else {
         printf("KVM unsupports IOMMU:%d\n", ret);
-        return false;
     }
 
     printf("KVM check finished\n");
